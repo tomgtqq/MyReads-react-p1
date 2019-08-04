@@ -1,9 +1,16 @@
 import React, {Component} from 'react'
 import Book from './Book'
 import * as BooksAPI from './BooksAPI'
+import PropTypes from 'prop-types'
 
 
 class BookSearcher extends Component {
+
+  static propTypes = {
+    booksList: PropTypes.array.isRequired,
+    onHandleChange: PropTypes.func.isRequired
+}
+
   state = {
     query: '',
     resultsList:[],
@@ -12,35 +19,52 @@ class BookSearcher extends Component {
   
   updateQuery = (query) => {
       this.setState(() => ({
-          query: query.trim()
+          query: query
       }))
   }
 
   searchBooks = () => {
-      BooksAPI.search(this.state.query)
+      if(this.state.query){
+      BooksAPI.search(this.state.query.trim())
       .then((res)=>{
-          console.log(res)
           if(res.error === "empty query" ){
             this.setState({
+                resultsList:[],
                 searchResult:"Not Found"
               })
           }
           else{
-            let bookList =  res
-            bookList.forEach((book)=>{
-                book.shelf = "none"
+            const searchList = res
+
+            searchList.forEach((book, i, booksList) => {
+              book.shelf = "none"
+              booksList[i] = book
             })
-            this.setState({
-                resultsList:bookList,
+
+            searchList.forEach((book, i, booksList) => {
+              this.props.booksList.forEach((myBook) => {
+                if (book.id === myBook.id) {
+                  book.shelf = myBook.shelf
+                }
               })
-            console.log('====================================');
-            console.log(this.state.resultsList);
-            console.log('====================================');  
+              booksList[i] = book
+            })
+
+            console.log(searchList)
+            this.setState({
+                resultsList: searchList
+              }) 
           }
       })
       .catch((err)=>(
         console.error(err)
         ))
+      }else {
+        this.setState({
+          resultsList:[],
+          searchResult:""
+        })
+      }
   }
 
   updateShelf = (book,shelf) => {
@@ -51,7 +75,7 @@ class BookSearcher extends Component {
 
   render() {
     const {onHandleChange} = this.props
-    const {query,resultsList,searchResult} = this.state
+    const {query, resultsList, searchResult} = this.state
 
     return (
       <div className="search-books">

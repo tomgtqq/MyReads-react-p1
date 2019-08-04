@@ -1,8 +1,14 @@
 import React, {Component} from 'react'
 import BookShelfChanger from './BookShelfChanger'
+import PropTypes from 'prop-types'
 
 
 class Book extends Component {
+
+    static propTypes = {
+        book: PropTypes.object.isRequired,
+        onUpdateShelf: PropTypes.func.isRequired
+    }
 
     changeShelf= (shelf) => {
         if(this.props.onUpdateShelf){
@@ -12,6 +18,7 @@ class Book extends Component {
 
     render() {
         const {book} = this.props
+        
             return(
                 <div className="book">
                 <div className="book-top">
@@ -20,7 +27,7 @@ class Book extends Component {
                         style={{
                         width: 128,
                         height: 193,
-                        backgroundImage: `url(${book.imageLinks.thumbnail})`
+                        backgroundImage: book.imageLinks ? `url(${book.imageLinks.thumbnail})` : "url(http://via.placeholder.com/128x193?text=?)"
                     }}>
                     </div>
                     <BookShelfChanger book={book} onChangeShelf={(value)=>{this.changeShelf(value)}}/>

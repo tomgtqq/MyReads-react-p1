@@ -63,8 +63,9 @@ class BooksApp extends React.Component {
             />
         )}/>
         <Route path='/search' render={({history})=>(
-          <BookSearcher onHandleChange={(movingBook,shelf)=>{
-            this.handleChange(movingBook,shelf)
+          <BookSearcher 
+            booksList= { this.state.booksList }
+            onHandleChange={(movingBook,shelf)=>{this.handleChange(movingBook,shelf)
             history.push('/')
           }}/>
         )}/>

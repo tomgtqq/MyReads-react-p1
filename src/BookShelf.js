@@ -1,10 +1,13 @@
 import React, {Component} from 'react'
 import Book from './Book'
 import { Link } from 'react-router-dom'
-
-
+import PropTypes from 'prop-types'
 
 class BookShelf extends Component {
+    static propTypes = {
+        booksList: PropTypes.array.isRequired,
+        onHandleChange: PropTypes.func.isRequired
+    }
 
     updateShelf= (book,shelf) => {
         if(this.props.onHandleChange){
