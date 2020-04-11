@@ -1,7 +1,8 @@
 # MyReads-react-p1
 
 The project of Udacity is using create-react-app to manage reading books. 
-![correct-use-of-state.gif](./public/correct-use-of-state.gif)
+
+![correct-use-of-state.gif](public/correct-use-of-state.gif)
 
 ### Componets
 
